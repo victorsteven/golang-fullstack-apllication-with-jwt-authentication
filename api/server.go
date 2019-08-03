@@ -3,6 +3,8 @@ package api
 import (
 	"fmt"
 	"golang_api_fullstack/api/router"
+	"golang_api_fullstack/auto"
+
 	"golang_api_fullstack/config"
 	"log"
 	"net/http"
@@ -10,6 +12,7 @@ import (
 
 func Run() {
 	config.Load()
+	auto.Load()
 	fmt.Printf("running... at port %d", config.PORT)
 	listen(config.PORT)
 
