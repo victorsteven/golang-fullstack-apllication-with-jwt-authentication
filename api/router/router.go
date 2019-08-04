@@ -8,5 +8,5 @@ import (
 
 func New() *mux.Router {
 	r := mux.NewRouter().StrictSlash(true)
-	return routes.SetUpRoutes(r)
+	return routes.SetUpRoutesWithMiddlewares(r)
 }
