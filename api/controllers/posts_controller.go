@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"golang_api_fullstack/api/auth"
 	"golang_api_fullstack/api/database"
 	"golang_api_fullstack/api/models"
 	"golang_api_fullstack/api/repository"
@@ -41,6 +42,8 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
+	defer db.Close()
+
 	repo := crud.NewRepositoryPostsCRUD(db)
 
 	func(postRepository repository.PostRepository) {
@@ -49,7 +52,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 			responses.ERROR(w, http.StatusInternalServerError, err)
 			return
 		}
-		w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, post.ID))
+		w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, post.ID))
 		responses.JSON(w, http.StatusCreated, post)
 	}(repo)
 }
@@ -60,6 +63,8 @@ func GetPosts(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
+	defer db.Close()
+
 	repo := crud.NewRepositoryPostsCRUD(db)
 
 	func(postRepository repository.PostRepository) {
@@ -86,6 +91,8 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
+	defer db.Close()
+
 	repo := crud.NewRepositoryPostsCRUD(db)
 
 	func(postRepository repository.PostRepository) {
@@ -130,6 +137,8 @@ func UpdatePost(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
+	defer db.Close()
+
 	repo := crud.NewRepositoryPostsCRUD(db)
 
 	func(postRepository repository.PostRepository) {
@@ -150,11 +159,22 @@ func DeletePost(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
+
+	uid, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, err)
+		return
+	}
+
+	fmt.Println("USER: ", uid)
+
 	db, err := database.Connect()
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
+	defer db.Close()
+
 	repo := crud.NewRepositoryPostsCRUD(db)
 
 	func(postRepository repository.PostRepository) {

@@ -54,6 +54,18 @@ func (u *User) Validate(action string) error {
 			return errors.New("Invalid email")
 		}
 		return nil
+	case "login":
+		if u.Password == "" {
+			return errors.New("Password required")
+		}
+		if u.Email == "" {
+			return errors.New("Required email")
+		}
+		if err := checkmail.ValidateFormat(u.Email); err != nil {
+			return errors.New("Invalid email")
+		}
+		return nil
+
 	default:
 		if u.Nickname == "" {
 			return errors.New("Required Nickname")

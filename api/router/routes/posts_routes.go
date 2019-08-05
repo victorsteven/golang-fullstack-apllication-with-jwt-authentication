@@ -7,28 +7,33 @@ import (
 
 var postsRoutes = []Route{
 	Route{
-		Uri:     "/posts",
-		Method:  http.MethodGet,
-		Handler: controllers.GetPosts,
+		Uri:          "/posts",
+		Method:       http.MethodGet,
+		Handler:      controllers.GetPosts,
+		AuthRequired: false,
 	},
 	Route{
-		Uri:     "/posts",
-		Method:  http.MethodPost,
-		Handler: controllers.CreatePost,
+		Uri:          "/posts",
+		Method:       http.MethodPost,
+		Handler:      controllers.CreatePost,
+		AuthRequired: true,
 	},
 	Route{
-		Uri:     "/posts/{id}",
-		Method:  http.MethodGet,
-		Handler: controllers.GetPost,
+		Uri:          "/posts/{id}",
+		Method:       http.MethodGet,
+		Handler:      controllers.GetPost,
+		AuthRequired: false,
 	},
 	Route{
-		Uri:     "/posts/{id}",
-		Method:  http.MethodPut,
-		Handler: controllers.UpdatePost,
+		Uri:          "/posts/{id}",
+		Method:       http.MethodPut,
+		Handler:      controllers.UpdatePost,
+		AuthRequired: true,
 	},
 	Route{
-		Uri:     "/posts/{id}",
-		Method:  http.MethodDelete,
-		Handler: controllers.DeletePost,
+		Uri:          "/posts/{id}",
+		Method:       http.MethodDelete,
+		Handler:      controllers.DeletePost,
+		AuthRequired: true,
 	},
 }

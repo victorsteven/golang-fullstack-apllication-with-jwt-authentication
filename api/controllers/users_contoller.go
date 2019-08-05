@@ -22,6 +22,8 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
+	defer db.Close()
+
 	repo := crud.NewRepositoryUsersCRUD(db)
 
 	func(usersRepository repository.UserRepository) {
@@ -60,6 +62,8 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
+	defer db.Close()
+
 	repo := crud.NewRepositoryUsersCRUD(db)
 
 	func(usersRepository repository.UserRepository) {
@@ -86,6 +90,8 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
+	defer db.Close()
+
 	repo := crud.NewRepositoryUsersCRUD(db)
 
 	func(usersRepository repository.UserRepository) {
@@ -127,6 +133,8 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
+	defer db.Close()
+
 	repo := crud.NewRepositoryUsersCRUD(db)
 
 	func(usersRepository repository.UserRepository) {
@@ -152,6 +160,8 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
+	defer db.Close()
+
 	repo := crud.NewRepositoryUsersCRUD(db)
 
 	func(usersRepository repository.UserRepository) {
