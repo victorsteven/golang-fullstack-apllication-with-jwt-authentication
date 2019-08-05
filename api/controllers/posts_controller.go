@@ -18,7 +18,7 @@ import (
 )
 
 func CreatePost(w http.ResponseWriter, r *http.Request) {
-	// w.Write([]byte("Create post"))
+	// w.Write([]byte("Create post")) //this is for demo
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
