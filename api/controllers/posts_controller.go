@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"golang_api_fullstack/api/auth"
 	"golang_api_fullstack/api/database"
@@ -34,6 +35,17 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	err = post.Validate()
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+
+	uid, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, err)
+		return
+	}
+
+	if uid != post.AuthorID {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
 	}
 
@@ -132,6 +144,17 @@ func UpdatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	uid, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, err)
+		return
+	}
+
+	if uid != post.AuthorID {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
+		return
+	}
+
 	db, err := database.Connect()
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
@@ -178,7 +201,7 @@ func DeletePost(w http.ResponseWriter, r *http.Request) {
 	repo := crud.NewRepositoryPostsCRUD(db)
 
 	func(postRepository repository.PostRepository) {
-		_, err := postRepository.Delete(pid)
+		_, err := postRepository.Delete(pid, uid)
 		if err != nil {
 			responses.ERROR(w, http.StatusBadRequest, err)
 			return
