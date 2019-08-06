@@ -20,5 +20,5 @@ func Run() {
 
 func listen(port int) {
 	r := router.New()
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), r))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), router.LoadCORS(r)))
 }
